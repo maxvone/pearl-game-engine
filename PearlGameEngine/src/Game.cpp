@@ -1,5 +1,7 @@
 #include "Game.h"
+#include "glm/fwd.hpp"
 #include <iostream>
+#include <glm/glm.hpp>
 
 Game::Game()
 {
@@ -20,10 +22,11 @@ void Game::Initialize()
 		return;
 	}
 
-	SDL_DisplayMode displayMode;
-	SDL_GetCurrentDisplayMode(0, &displayMode);
-	windowWidth = displayMode.w;
-	windowHeight = displayMode.h;
+	//Struct for getting information about a monitor.
+	//SDL_DisplayMode displayMode;
+	//SDL_GetCurrentDisplayMode(0, &displayMode);
+	windowWidth = 800;
+	windowHeight = 600;
 
 	window = SDL_CreateWindow(NULL,	SDL_WINDOWPOS_CENTERED,	SDL_WINDOWPOS_CENTERED,
 		windowWidth, windowHeight, SDL_WINDOW_BORDERLESS);
@@ -34,7 +37,8 @@ void Game::Initialize()
 		return;
 	}
 
-	renderer = SDL_CreateRenderer(window, -1, 0);
+	renderer = SDL_CreateRenderer(window, -1,
+			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
 	{
 		std::cerr << "Error creating sdl renderer." << std::endl;
@@ -47,12 +51,22 @@ void Game::Initialize()
 
 void Game::Run()
 {
+	SetupGameLoop();
 	while (isRunning)
 	{
 		ProcessInput();
 		Update();
 		Render();
 	}
+}
+
+glm::vec2 playerPosition;
+glm::vec2 playerVelocity;
+
+void Game::SetupGameLoop()
+{
+	playerPosition = glm::vec2(10.0, 20.0);
+	playerVelocity = glm::vec2(1.0, 0.0);
 }
 
 void Game::ProcessInput()
@@ -77,16 +91,26 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
-	//TODO: Update game objects state
+	playerPosition += playerVelocity;
 }
 
 void Game::Render()
 {
-	SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	//TODO: Render all game objects
-	
+	SDL_Surface* surface = IMG_Load("./assets/images/tree.png");
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+
+	SDL_Rect destinationRect = {
+		static_cast<int>(playerPosition.x),
+		static_cast<int>(playerPosition.y),
+		32, 32};
+
+	SDL_RenderCopy(renderer, texture, NULL, &destinationRect);
+	SDL_DestroyTexture(texture);
+
 	SDL_RenderPresent(renderer);
 }
 
