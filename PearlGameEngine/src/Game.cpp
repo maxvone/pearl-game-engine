@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "glm/fwd.hpp"
 #include <iostream>
 #include <glm/glm.hpp>
 
@@ -91,6 +90,10 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
+	while(!SDL_TICKS_PASSED(SDL_GetTicks(), millisecsPreviousFrame + MILISECS_PER_FRAME));
+
+	millisecsPreviousFrame = SDL_GetTicks();
+
 	playerPosition += playerVelocity;
 }
 
