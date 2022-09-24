@@ -21,9 +21,14 @@ void Game::Initialize()
 		return;
 	}
 
-	//Struct for getting information about a monitor.
-	//SDL_DisplayMode displayMode;
-	//SDL_GetCurrentDisplayMode(0, &displayMode);
+	SetupWindow();
+	SetupRenderer();
+
+	isRunning = true;
+}
+
+void Game::SetupWindow()
+{
 	windowWidth = 800;
 	windowHeight = 600;
 
@@ -36,6 +41,11 @@ void Game::Initialize()
 		return;
 	}
 
+	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
+}
+
+void Game::SetupRenderer()
+{
 	renderer = SDL_CreateRenderer(window, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
@@ -43,9 +53,6 @@ void Game::Initialize()
 		std::cerr << "Error creating sdl renderer." << std::endl;
 		return;
 	}
-	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN);
-
-	isRunning = true;
 }
 
 void Game::Run()

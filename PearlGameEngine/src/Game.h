@@ -15,13 +15,16 @@ private:
 
 	bool isRunning;
 	int millisecsPreviousFrame = 0;
+
+	void SetupWindow();
+	void SetupRenderer();
 public:
 	Game();
 	~Game();
 
 	void Initialize();
-	void SetupGameLoop();
 	void Run();
+	void SetupGameLoop();
 	void ProcessInput();
 	void Update();
 	void Render();
