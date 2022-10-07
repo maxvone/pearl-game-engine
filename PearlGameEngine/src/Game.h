@@ -15,7 +15,9 @@ private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	bool isRunning;
+	bool isFramerateLocked;
 	int millisecsPreviousFrame = 0;
+	float deltaTime;
 
 	void SetupWindow();
 	void SetupRenderer();

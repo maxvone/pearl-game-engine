@@ -1,8 +1,10 @@
 #include "Game.h"
+#include "SDL_timer.h"
 
 Game::Game()
 {
 	isRunning = false;
+	isFramerateLocked = false;
 	std::cout << "Game constructor call" << std::endl;
 }
 
@@ -70,7 +72,7 @@ glm::vec2 playerVelocity;
 void Game::SetupGameLoop()
 {
 	playerPosition = glm::vec2(10.0, 20.0);
-	playerVelocity = glm::vec2(1.0, 0.0);
+	playerVelocity = glm::vec2(50.0, 0.0);
 }
 
 void Game::ProcessInput()
@@ -95,15 +97,19 @@ void Game::ProcessInput()
 
 void Game::Update()
 {
-	int millisecsToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
-	if (millisecsToWait > 0 && millisecsToWait <= MILLISECS_PER_FRAME)
+	if (isFramerateLocked)
 	{
-		SDL_Delay(millisecsToWait);
+		int millisecsToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
+		if (millisecsToWait > 0 && millisecsToWait <= MILLISECS_PER_FRAME)
+		{
+			SDL_Delay(millisecsToWait);
+		}
 	}
 
+	deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
 	millisecsPreviousFrame = SDL_GetTicks();
 
-	playerPosition += playerVelocity;
+	playerPosition += playerVelocity * deltaTime;
 }
 
 void Game::Render()
