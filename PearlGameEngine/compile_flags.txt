@@ -1,2 +1,3 @@
+-xc++
 -IC:/SDL2/include
 -ID:/Development/GameDev/Learning/Projects/PearlGameEngine/PearlGameEngine/libs
