@@ -1,23 +1,22 @@
 #include "Game.h"
-#include "SDL_timer.h"
 
 Game::Game()
 {
 	isRunning = false;
 	isFramerateLocked = false;
-	std::cout << "Game constructor call" << std::endl;
+	Logger::Log("Game constructor call");
 }
 
 Game::~Game()
 {
-	std::cout << "Game destructor call" << std::endl;
+	Logger::Log("Game destructor call");
 }
 
 void Game::Initialize()
 {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
 	{
-		std::cerr << "Error initializing SDL." << std::endl;
+		Logger::Err("Error initializing SDL.");
 		return;
 	}
 
@@ -37,7 +36,7 @@ void Game::SetupWindow()
 
 	if (!window)
 	{
-		std::cerr << "Error creating sdl window." << std::endl;
+		Logger::Err("Error creating sdl window.");
 		return;
 	}
 
@@ -50,7 +49,7 @@ void Game::SetupRenderer()
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!renderer)
 	{
-		std::cerr << "Error creating sdl renderer." << std::endl;
+		Logger::Err("Error creating sdl renderer");
 		return;
 	}
 }
@@ -72,7 +71,7 @@ glm::vec2 playerVelocity;
 void Game::SetupGameLoop()
 {
 	playerPosition = glm::vec2(10.0, 20.0);
-	playerVelocity = glm::vec2(50.0, 0.0);
+	playerVelocity = glm::vec2(100.0, 0.0);
 }
 
 void Game::ProcessInput()
@@ -117,14 +116,14 @@ void Game::Render()
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	SDL_Surface* surface = IMG_Load("./assets/images/tree.png");
+	SDL_Surface* surface = IMG_Load("./assets/images/truck-ford-right.png");
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
 	SDL_Rect destinationRect = {
 		static_cast<int>(playerPosition.x),
 		static_cast<int>(playerPosition.y),
-		32, 32};
+		256, 256};
 
 	SDL_RenderCopy(renderer, texture, NULL, &destinationRect);
 	SDL_DestroyTexture(texture);
