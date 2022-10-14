@@ -1,7 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Logger.h"
+#include "..\Logger\Logger.h"
 
 #include <SDL.h>
 #include <SDL_image.h>

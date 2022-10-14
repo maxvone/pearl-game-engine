@@ -1,5 +1,4 @@
 #include "Logger.h"
-#include <vector>
 
 std::vector<LogEntry> Logger::messages;
 
